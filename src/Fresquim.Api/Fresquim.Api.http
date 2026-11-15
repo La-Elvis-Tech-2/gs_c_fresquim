@@ -1,0 +1,75 @@
+### Fresquim API - exemplos de requisições
+### Rode a API (dotnet run --project src/Fresquim.Api) e use o botão "Send Request" do VS Code (REST Client) ou do Visual Studio.
+
+@base = http://localhost:5200
+
+### Risco de calor agora na Av. Paulista (Open-Meteo) + pontos recomendados
+GET {{base}}/api/clima/risco?latitude=-23.5614&longitude=-46.6559&raioKm=2
+
+### Listar pontos (com filtros e paginação)
+GET {{base}}/api/pontos?tipo=Bebedouro&pagina=1&tamanhoPagina=10
+
+### Buscar por texto (nome ou endereço)
+GET {{base}}/api/pontos?busca=Paulista
+
+### Pontos disponíveis mais próximos
+GET {{base}}/api/pontos/proximos?latitude=-23.5614&longitude=-46.6559&raioKm=1.5
+
+### Cadastrar uma estação
+# @name novaEstacao
+POST {{base}}/api/pontos
+Content-Type: application/json
+
+{
+  "tipo": "Estacao",
+  "nome": "Estação Trianon-Masp",
+  "logradouro": "Avenida Paulista, 1500",
+  "bairro": "Bela Vista",
+  "latitude": -23.5629,
+  "longitude": -46.6544,
+  "horario": "Todos os dias, 4h40 à meia-noite",
+  "linha": "Linha 2-Verde"
+}
+
+### Ver a estação cadastrada
+GET {{base}}/api/pontos/{{novaEstacao.response.body.$.id}}
+
+### Desativar a estação
+PATCH {{base}}/api/pontos/{{novaEstacao.response.body.$.id}}/status
+Content-Type: application/json
+
+{ "status": "Desativado" }
+
+### Avisar um problema (troque o id por um ponto da listagem)
+# @name problema
+POST {{base}}/api/avisos/problemas
+Content-Type: application/json
+
+{
+  "pontoApoioId": "COLE-AQUI-O-ID-DE-UM-PONTO",
+  "descricao": "O bebedouro está sem água desde ontem."
+}
+
+### Prefeitura analisa o aviso
+PATCH {{base}}/api/avisos/{{problema.response.body.$.id}}/analise
+
+### Prefeitura resolve o aviso (o ponto volta a funcionar)
+PATCH {{base}}/api/avisos/{{problema.response.body.$.id}}/resolver
+Content-Type: application/json
+
+{ "resposta": "Bebedouro consertado pela subprefeitura." }
+
+### Sugerir um ponto novo
+POST {{base}}/api/avisos/sugestoes
+Content-Type: application/json
+
+{
+  "nomeLocal": "Praça do MASP",
+  "descricao": "Tem árvores grandes e bancos na sombra."
+}
+
+### Listar avisos resolvidos
+GET {{base}}/api/avisos?status=Resolvido
+
+### Indicadores de impacto
+GET {{base}}/api/estatisticas
