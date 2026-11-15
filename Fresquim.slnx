@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Fresquim.Api/Fresquim.Api.csproj" />
+    <Project Path="src/Fresquim.Application/Fresquim.Application.csproj" />
+    <Project Path="src/Fresquim.Domain/Fresquim.Domain.csproj" />
+    <Project Path="src/Fresquim.Infrastructure/Fresquim.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Fresquim.Tests/Fresquim.Tests.csproj" />
+  </Folder>
+</Solution>
