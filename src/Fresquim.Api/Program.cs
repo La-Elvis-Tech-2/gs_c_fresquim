@@ -13,10 +13,21 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services
-    .AddControllers()
-    .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+    .AddControllers(o =>
+    {
+        // Os campos obrigatórios são marcados com [Required] (mensagem em português);
+        // assim o ASP.NET não cria validações implícitas com mensagens em inglês.
+        o.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+        MensagensPtBr.Configurar(o.ModelBindingMessageProvider);
+    })
+    .AddJsonOptions(o =>
+    {
+        o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        o.AllowInputFormatterExceptionMessages = false;
+    })
+    .ConfigureApiBehaviorOptions(o => o.InvalidModelStateResponseFactory = MensagensPtBr.RespostaDeValidacao);
 
-builder.Services.AddProblemDetails();
+builder.Services.AddProblemDetails(o => o.CustomizeProblemDetails = MensagensPtBr.TraduzirTitulo);
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 builder.Services.AddCors(o => o.AddDefaultPolicy(p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));

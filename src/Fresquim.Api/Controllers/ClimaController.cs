@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Fresquim.Application.Clima;
+using Fresquim.Application.Common;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fresquim.Api.Controllers;
@@ -21,9 +22,9 @@ public class ClimaController(IClimaService service) : ControllerBase
     [ProducesResponseType<RiscoCalorResponse>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status503ServiceUnavailable)]
     public async Task<ActionResult<RiscoCalorResponse>> Risco(
-        [FromQuery, Range(-90, 90)] double latitude = -23.5614,
-        [FromQuery, Range(-180, 180)] double longitude = -46.6559,
-        [FromQuery, Range(0.1, 20)] double raioKm = 2,
+        [FromQuery, Range(-90, 90, ErrorMessage = Mensagens.Faixa)] double latitude = -23.5614,
+        [FromQuery, Range(-180, 180, ErrorMessage = Mensagens.Faixa)] double longitude = -46.6559,
+        [FromQuery, Range(0.1, 20, ErrorMessage = Mensagens.Faixa)] double raioKm = 2,
         CancellationToken ct = default) =>
         Ok(await service.AvaliarRiscoAsync(latitude, longitude, raioKm, ct));
 }

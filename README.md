@@ -144,7 +144,7 @@ Api ──► Application ──► Domain
   - `201 Created` com `Location`, `204 No Content`, `400`, `404` e `503`;
   - enums aparecem como texto no JSON.
 - **Validação:** DataAnnotations nos DTOs geram `400` automático. As regras de negócio também viram `400`, com a mensagem do domínio.
-- **Erros:** respostas no padrão **ProblemDetails (RFC 9457)**, montadas por um `IExceptionHandler` global.
+- **Erros:** respostas no padrão **ProblemDetails (RFC 9457)**, montadas por um `IExceptionHandler` global. Todas as mensagens (validação, JSON inválido, rota inexistente) saem em português.
 - **Documentação:** comentários XML aparecem no Scalar.
 
 ### Testes unitários (61 testes)

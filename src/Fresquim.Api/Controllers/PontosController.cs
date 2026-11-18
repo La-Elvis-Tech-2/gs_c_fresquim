@@ -36,9 +36,9 @@ public class PontosController(IPontoApoioService service) : ControllerBase
     [ProducesResponseType<IReadOnlyList<PontoProximoResponse>>(StatusCodes.Status200OK)]
     [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<IReadOnlyList<PontoProximoResponse>>> Proximos(
-        [FromQuery, Required, Range(-90, 90)] double latitude,
-        [FromQuery, Required, Range(-180, 180)] double longitude,
-        [FromQuery, Range(0.1, 20)] double raioKm = 2,
+        [FromQuery, Required(ErrorMessage = Mensagens.Obrigatorio), Range(-90, 90, ErrorMessage = Mensagens.Faixa)] double latitude,
+        [FromQuery, Required(ErrorMessage = Mensagens.Obrigatorio), Range(-180, 180, ErrorMessage = Mensagens.Faixa)] double longitude,
+        [FromQuery, Range(0.1, 20, ErrorMessage = Mensagens.Faixa)] double raioKm = 2,
         [FromQuery] TipoPonto? tipo = null,
         CancellationToken ct = default) =>
         Ok(await service.ListarProximosAsync(latitude, longitude, raioKm, tipo, ct));
